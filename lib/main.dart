@@ -1,68 +1,58 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_template/domain/use_cases/index.dart';
+import 'package:flutter_template/infrastructure/data_sources/index.dart';
+import 'package:flutter_template/infrastructure/repositories/index.dart';
+import 'package:flutter_template/presentation/providers/index.dart';
+import 'package:flutter_template/presentation/routes/application_routes.dart';
+import 'package:flutter_template/share_preferens/user_preferences.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  final authenticationDataSource = AuthenticationDataSourceImpl();
+
+  final prefs = UserPreferences();
+  await prefs.initPrefs();
+  final authenticationRepository =
+      AuthenticationRepositoryImpl(authenticationDataSource);
+
+  final authenticationUseCase =
+      AuthenticationUseCaseImpl(authenticationRepository);
+
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
+  runApp(MyApp(
+    navigatorKey: navigatorKey,
+    authenticationUseCase: authenticationUseCase,
+  ));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final GlobalKey<NavigatorState> navigatorKey;
+  final AuthenticationUseCase authenticationUseCase;
+
+  // ignore: use_super_parameters
+  const MyApp({
+    Key? key,
+    required this.navigatorKey,
+    required this.authenticationUseCase,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => AuthenticationProvider(authenticationUseCase),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+      ],
+      child: MaterialApp(
+        title: 'Flutter-Template',
+        debugShowCheckedModeBanner: false,
+        routes: getApplicationRoutes(navigatorKey),
+        initialRoute: '/',
+        navigatorKey: navigatorKey,
       ),
     );
   }
