@@ -1,16 +1,39 @@
-# flutter_template
+<a href="https://flutter.dev/">
+  <h1 align="center">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="https://storage.googleapis.com/cms-storage-bucket/6e19fee6b47b36ca613f.png">
+      <img alt="Flutter" src="https://storage.googleapis.com/cms-storage-bucket/c823e53b3a1a7b0d36a9.png">
+    </picture>
+  </h1>
+</a>
 
-A new Flutter project.
+# Flutter-Template
 
-## Getting Started
+Aplicación móvil para iniciar un proyecto con Flutter utilizando Clean Architecture.
 
-This project is a starting point for a Flutter application.
+## Requisitos previos
 
-A few resources to get you started if this is your first Flutter project:
+- Flutter SDK instalado (3.19.0)
+- Dart (3.3.0)
+- Editor de código (Recomendado: Visual Studio Code)
+- Dispositivo físico o emulador para ejecutar la aplicación
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+### Pasos de Instalación
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+1. Clonar el repositorio en tu máquina local:
+
+```bash
+git clone https://github.com/SebastianPadillaZabala/Flutter-Template.git
+```
+
+2. Navegar al directorio del proyecto:
+
+```bash
+cd flutter_template
+```
+
+3. Instalar las dependencias del proyecto:
+
+```bash
+flutter pub get
+```
